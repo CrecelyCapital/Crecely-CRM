@@ -20,6 +20,7 @@ export const users = sqliteTable(
   (table) => ({
     emailIdx: index("users_email_idx").on(table.email),
   })
+);
 
 export const projects = sqliteTable(
   "projects",
