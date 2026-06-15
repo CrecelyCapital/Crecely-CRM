@@ -17,8 +17,9 @@ export const users = sqliteTable(
     role: text("role").notNull().default("manager"),
     createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
   },
-  (table) => [index("users_email_idx").on(table.email)]
-);
+  (table) => ({
+    emailIdx: index("users_email_idx").on(table.email),
+  })
 
 export const projects = sqliteTable(
   "projects",
@@ -48,10 +49,10 @@ export const projects = sqliteTable(
     createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
     updatedAt: text("updated_at").notNull().default(sql`CURRENT_TIMESTAMP`),
   },
-  (table) => [
-    index("projects_asset_class_idx").on(table.assetClass),
-    index("projects_city_country_idx").on(table.city, table.country),
-  ]
+  (table) => ({
+    assetClassIdx: index("projects_asset_class_idx").on(table.assetClass),
+    cityCountryIdx: index("projects_city_country_idx").on(table.city, table.country),
+  })
 );
 
 export const contacts = sqliteTable(
@@ -75,10 +76,10 @@ export const contacts = sqliteTable(
     createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
     updatedAt: text("updated_at").notNull().default(sql`CURRENT_TIMESTAMP`),
   },
-  (table) => [
-    index("contacts_type_idx").on(table.contactType),
-    index("contacts_company_idx").on(table.company),
-  ]
+  (table) => ({
+    typeIdx: index("contacts_type_idx").on(table.contactType),
+    companyIdx: index("contacts_company_idx").on(table.company),
+  })
 );
 
 export const projectContacts = sqliteTable(
@@ -101,12 +102,12 @@ export const projectContacts = sqliteTable(
     nextFollowUpAt: text("next_follow_up_at"),
     notes: text("notes").notNull().default(""),
   },
-  (table) => [
-    index("project_contacts_project_idx").on(table.projectId),
-    index("project_contacts_contact_idx").on(table.contactId),
-    index("project_contacts_status_idx").on(table.dealStatus),
-    uniqueIndex("project_contacts_unique_idx").on(table.projectId, table.contactId),
-  ]
+  (table) => ({
+    projectIdx: index("project_contacts_project_idx").on(table.projectId),
+    contactIdx: index("project_contacts_contact_idx").on(table.contactId),
+    statusIdx: index("project_contacts_status_idx").on(table.dealStatus),
+    uniqueIdx: uniqueIndex("project_contacts_unique_idx").on(table.projectId, table.contactId),
+  })
 );
 
 export const generatedDocuments = sqliteTable(
@@ -123,12 +124,13 @@ export const generatedDocuments = sqliteTable(
     createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
     updatedAt: text("updated_at").notNull().default(sql`CURRENT_TIMESTAMP`),
   },
-  (table) => [
-    index("generated_documents_project_idx").on(table.projectId),
-    index("generated_documents_type_language_idx").on(
+  (table) => ({
+    projectIdx: index("generated_documents_project_idx").on(table.projectId),
+    typeLanguageIdx: index("generated_documents_type_language_idx").on(
       table.documentType,
       table.language
     ),
+  })
   ]
 );
 
@@ -148,10 +150,10 @@ export const interactions = sqliteTable(
     nextAction: text("next_action").notNull().default(""),
     createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
   },
-  (table) => [
-    index("interactions_project_idx").on(table.projectId),
-    index("interactions_contact_idx").on(table.contactId),
-  ]
+  (table) => ({
+    projectIdx: index("interactions_project_idx").on(table.projectId),
+    contactIdx: index("interactions_contact_idx").on(table.contactId),
+  })
 );
 
 export type ProjectRow = typeof projects.$inferSelect;
