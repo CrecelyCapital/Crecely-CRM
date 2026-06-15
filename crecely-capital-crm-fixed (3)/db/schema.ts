@@ -132,7 +132,6 @@ export const generatedDocuments = sqliteTable(
       table.language
     ),
   })
-  ]
 );
 
 export const interactions = sqliteTable(
